@@ -65,6 +65,8 @@ type chainCallOption struct {
 
 	// CallbackHandler is the callback handler for Chain
 	CallbackHandler callbacks.Handler
+
+	UserAppKey string `json:"user,omitempty"` // FIXME: ASAP MF HACK
 }
 
 // WithModel is an option for LLM.Call.
@@ -161,6 +163,14 @@ func WithCallback(callbackHandler callbacks.Handler) ChainCallOption {
 	}
 }
 
+// WithUserAppKey will add an option to set metadata to include in the request.
+// FIXME: ASAP MF
+func WithUserAppKey(userAppKey string) ChainCallOption {
+	return func(o *chainCallOption) {
+		o.UserAppKey = userAppKey
+	}
+}
+
 func getLLMCallOptions(options ...ChainCallOption) []llms.CallOption { //nolint:cyclop
 	opts := &chainCallOption{}
 	for _, option := range options {
@@ -174,6 +184,11 @@ func getLLMCallOptions(options ...ChainCallOption) []llms.CallOption { //nolint:
 	}
 
 	var chainCallOption []llms.CallOption
+
+	// FIXME: ASAP MF HACK
+	if opts.UserAppKey != "" {
+		chainCallOption = append(chainCallOption, llms.WithUserAppKey(opts.UserAppKey))
+	}
 
 	if opts.modelSet {
 		chainCallOption = append(chainCallOption, llms.WithModel(opts.Model))

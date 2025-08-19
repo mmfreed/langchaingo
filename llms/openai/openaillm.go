@@ -141,6 +141,7 @@ func (o *LLM) GenerateContent(ctx context.Context, messages []llms.MessageConten
 		FunctionCallBehavior: openaiclient.FunctionCallBehavior(opts.FunctionCallBehavior),
 		Seed:                 opts.Seed,
 		Metadata:             opts.Metadata,
+		UserAppKey:           opts.UserAppKey, // FIXME: ASAP MF HACK
 	}
 	if opts.JSONMode {
 		req.ResponseFormat = ResponseFormatJSON

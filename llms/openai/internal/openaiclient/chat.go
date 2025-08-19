@@ -79,6 +79,8 @@ type ChatRequest struct {
 
 	// Metadata allows you to specify additional information that will be passed to the model.
 	Metadata map[string]any `json:"metadata,omitempty"`
+
+	UserAppKey string `json:"user,omitempty"` // FIXME: ASAP MF HACK
 }
 
 // MarshalJSON ensures that only one of MaxTokens or MaxCompletionTokens is sent.

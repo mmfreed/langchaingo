@@ -65,6 +65,8 @@ type CallOptions struct {
 	// The meaning of this field is specific to the backend in use.
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 
+	UserAppKey string `json:"user,omitempty"` // FIXME: ASAP MF HACK
+
 	// ResponseMIMEType MIME type of the generated candidate text.
 	// Supported MIME types are: text/plain: (default) Text output.
 	// application/json: JSON response in the response candidates.
@@ -280,6 +282,14 @@ func WithJSONMode() CallOption {
 func WithMetadata(metadata map[string]interface{}) CallOption {
 	return func(o *CallOptions) {
 		o.Metadata = metadata
+	}
+}
+
+// WithUserAppKey will add an option to set metadata to include in the request.
+// FIXME: ASAP MF
+func WithUserAppKey(userAppKey string) CallOption {
+	return func(o *CallOptions) {
+		o.UserAppKey = userAppKey
 	}
 }
 

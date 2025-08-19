@@ -84,6 +84,7 @@ func (t *LoggingTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 		logger.Error("Failed to dump request", "error", err)
 	} else {
 		logger.Debug(string(requestDump))
+		fmt.Printf("Request to %s\n%s\n", req.URL, string(requestDump))
 	}
 	// Perform the actual request
 	resp, err := transport.RoundTrip(req)
@@ -96,6 +97,7 @@ func (t *LoggingTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 		logger.Error("Failed to dump response", "error", err)
 	} else {
 		logger.Debug(string(responseDump))
+		fmt.Printf("Response %d\n%s\n", resp.StatusCode, string(responseDump))
 	}
 	return resp, nil
 }
