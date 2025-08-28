@@ -2,6 +2,7 @@ package chains
 
 import (
 	"context"
+	"os"
 
 	"github.com/tmc/langchaingo/callbacks"
 	"github.com/tmc/langchaingo/llms"
@@ -186,7 +187,11 @@ func getLLMCallOptions(options ...ChainCallOption) []llms.CallOption { //nolint:
 	var chainCallOption []llms.CallOption
 
 	// FIXME: ASAP MF HACK
-	if opts.UserAppKey != "" {
+	// Check environment variable for SOT_APP_KEY_STR
+	sotAppKey := os.Getenv("SOT_APP_KEY_STR")
+	if sotAppKey != "" {
+		chainCallOption = append(chainCallOption, llms.WithUserAppKey(sotAppKey))
+	} else if opts.UserAppKey != "" {
 		chainCallOption = append(chainCallOption, llms.WithUserAppKey(opts.UserAppKey))
 	}
 
