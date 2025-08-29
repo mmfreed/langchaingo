@@ -3,6 +3,7 @@ package openai
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/tmc/langchaingo/callbacks"
 	"github.com/tmc/langchaingo/llms"
@@ -108,6 +109,14 @@ func (o *LLM) GenerateContent(ctx context.Context, messages []llms.MessageConten
 		if v, ok := opts.Metadata["openai:use_legacy_max_tokens"].(bool); ok {
 			useLegacyMaxTokens = v
 		}
+	}
+
+	// FIXME: ASAP MF HACK
+	// Main problem that func (o *OpenAIFunctionsAgent) Plan does not  propagates opts..
+	// Check environment variable for SOT_APP_KEY_STR
+	if opts.UserAppKey == "" {
+		opts.UserAppKey = os.Getenv("SOT_APP_KEY_STR")
+		opts.JSONMode = true
 	}
 
 	req := &openaiclient.ChatRequest{
