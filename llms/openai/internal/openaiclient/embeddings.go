@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 const (
@@ -17,6 +18,7 @@ type embeddingPayload struct {
 	Model      string   `json:"model"`
 	Input      []string `json:"input"`
 	Dimensions int      `json:"dimensions,omitempty"`
+	UserAppKey string   `json:"user,omitempty"` // FIXME: ASAP MF HACK
 }
 
 type embeddingResponsePayload struct {
@@ -37,6 +39,12 @@ type embeddingResponsePayload struct {
 func (c *Client) createEmbedding(ctx context.Context, payload *embeddingPayload) (*embeddingResponsePayload, error) {
 	if c.baseURL == "" {
 		c.baseURL = defaultBaseURL
+	}
+
+	// FIXME: ASAP MF HACK
+	// Check environment variable for SOT_APP_KEY_STR
+	if payload.UserAppKey == "" {
+		payload.UserAppKey = os.Getenv("SOT_APP_KEY_STR")
 	}
 
 	payloadBytes, err := json.Marshal(payload)
